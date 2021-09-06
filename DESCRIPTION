@@ -1,0 +1,21 @@
+Package: mlekb
+Title: Dictionary of machine learning functions for clinical data at Elbeklinikum Buxtehude
+Version: 0.0.1
+Authors@R: 
+    person(given = "Marc",
+           family = "Bender",
+           role = c("aut", "cre"),
+           email = "mbender1992@web.de")
+Description: TBD.
+Imports: 
+    caret, 
+    cvAUC,
+    doParallel,
+    pbapply,
+    pROC,
+    tidyverse
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9001
