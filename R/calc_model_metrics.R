@@ -1,11 +1,11 @@
 #' @title Train caret model and extract model results
 #'
-#' This function trains a model using the trainControl and train function included in \pkg{caret}. Afterwards several metrics are extracted and stored in a list.
+#' @description This function trains a model using the trainControl and train function included in \pkg{caret}. Afterwards several metrics are extracted and stored in a list.
 #' Stored objects are metrics obtained in the training process (ROC or Accuracy, Hyperparameters, etc.), coefficients of the trained model,
 #' results of the cross validation process, predictions on a test set which should be defined with the [caret::createMultiFolds()] function. Accepted train methods are the methods
 #' listed in the \pkg{caret} documentation.
 #' @param x.train subset of data used for training.
-#' @param y.train outcome variable used to compare predictions obtained with the trained model. Data has to split the same way as x.train.
+#' @param y.train outcome variable used to compare predictions obtained with the trained model. Data has to split the same way as x.train. Data needs to be encoded in a specific way: 0 = no event, 1 = event or a respective factor that uses the control data as the first factor.
 #' Preferred ways of splitting are the [createMultiFolds()] and [createFolds()] functions included in the \pkg{caret} package.
 #' @param x.test subset of data model is applied to, to test performance.
 #' @param y.test outcome variable corresponding to the x.test split.
@@ -15,9 +15,9 @@
 #' @inheritParams caret::train
 #' @param ... additional parameters passed on to [caret::train()] function.
 #' @inheritParams pROC::roc
+#' @export
 
-
-calc_model_metrics <- function(x.train, y.train, x.test, y.test, train.method = "glmnet",summaryFunction = twoClassSummary, savePredictions = TRUE,
+calc_model_metrics <- function(x.train, y.train, x.test, y.test, train.method = "glmnet", summaryFunction = twoClassSummary, savePredictions = TRUE,
                                returnResamp = "all", classProbs=TRUE,  cv.method = "repeatedcv", number = 10, repeats = 5, metric = "ROC", direction = ">",
                                levels = c("no", "yes"), preProcess = c("center","scale"), tuneGrid = NULL, ...){
 
@@ -30,7 +30,7 @@ calc_model_metrics <- function(x.train, y.train, x.test, y.test, train.method = 
               trControl = cctrl1,metric = metric, tuneGrid = tuneGrid, ...)
 
   # obtain cv AUC of training folds
-  ci_cv <- ci.cv.AUC(md)
+  ci_cv <- ci_cv_AUC(md)
 
   # train coefs
   feat <- coef(md$finalModel, md$finalModel$lambdaOpt)
@@ -44,7 +44,7 @@ calc_model_metrics <- function(x.train, y.train, x.test, y.test, train.method = 
   # object to return
   res <- list(
     predictions = data.frame(pred.ja = pred$yes, obs = y.test),
-    coefficients = rownames_to_column(data.frame(vals = feat[feat[,1] != 0, 1][-1]),"coefs"),
+    coefficients = tibble::rownames_to_column(data.frame(vals = feat[feat[,1] != 0, 1][-1]),"coefs"),
     train.metrics = opt[which(opt$ROC == max(opt$ROC)),],
     train.cv = data.frame(cvAUC = ci_cv$cvAUC,
                           se = ci_cv$se,
@@ -56,3 +56,5 @@ calc_model_metrics <- function(x.train, y.train, x.test, y.test, train.method = 
   )
   return(res)
 }
+
+

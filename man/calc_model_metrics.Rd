@@ -2,12 +2,7 @@
 % Please edit documentation in R/calc_model_metrics.R
 \name{calc_model_metrics}
 \alias{calc_model_metrics}
-\title{Train caret model and extract model results
-
-This function trains a model using the trainControl and train function included in \pkg{caret}. Afterwards several metrics are extracted and stored in a list.
-Stored objects are metrics obtained in the training process (ROC or Accuracy, Hyperparameters, etc.), coefficients of the trained model,
-results of the cross validation process, predictions on a test set which should be defined with the \code{\link[caret:createDataPartition]{caret::createMultiFolds()}} function. Accepted train methods are the methods
-listed in the \pkg{caret} documentation.}
+\title{Train caret model and extract model results}
 \usage{
 calc_model_metrics(
   x.train,
@@ -33,7 +28,7 @@ calc_model_metrics(
 \arguments{
 \item{x.train}{subset of data used for training.}
 
-\item{y.train}{outcome variable used to compare predictions obtained with the trained model. Data has to split the same way as x.train.
+\item{y.train}{outcome variable used to compare predictions obtained with the trained model. Data has to split the same way as x.train. Data needs to be encoded in a specific way: 0 = no event, 1 = event or a respective factor that uses the control data as the first factor.
 Preferred ways of splitting are the \code{\link[=createMultiFolds]{createMultiFolds()}} and \code{\link[=createFolds]{createFolds()}} functions included in the \pkg{caret} package.}
 
 \item{x.test}{subset of data model is applied to, to test performance.}
@@ -119,8 +114,6 @@ for each model or see
 \item{...}{additional parameters passed on to \code{\link[caret:train]{caret::train()}} function.}
 }
 \description{
-Train caret model and extract model results
-
 This function trains a model using the trainControl and train function included in \pkg{caret}. Afterwards several metrics are extracted and stored in a list.
 Stored objects are metrics obtained in the training process (ROC or Accuracy, Hyperparameters, etc.), coefficients of the trained model,
 results of the cross validation process, predictions on a test set which should be defined with the \code{\link[caret:createDataPartition]{caret::createMultiFolds()}} function. Accepted train methods are the methods
