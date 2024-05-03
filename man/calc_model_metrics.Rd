@@ -39,7 +39,7 @@ Preferred ways of splitting are the \code{\link[=createMultiFolds]{createMultiFo
 
 \item{summaryFunction}{a function to compute performance metrics across
 resamples. The arguments to the function should be the same as those in
-\code{\link[caret]{defaultSummary}}. Note that if \code{method = "oob"} is used, 
+\code{\link[caret]{defaultSummary}}. Note that if \code{method = "oob"} is used,
 this option is ignored and a warning is issued.}
 
 \item{savePredictions}{an indicator of how much of the hold-out predictions
