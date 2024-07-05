@@ -64,7 +64,7 @@ ml_eval <- function(modelMatrix, y, k.outer = 10, rep.outer = 10, k.inner = 10, 
   set.seed(849)
   results <- lapply(c(1:rep.outer), function(split){
     # select Data from 1 repeat
-    dat <- train.test.folds[[paste("Rep",1, sep ="")]]
+    dat <- train.test.folds[[paste("Rep",split, sep ="")]]
     # print message to follow progress
     message(paste("Starting calculation of Rep", split,"... of", rep.outer))
     # apply model to all folds of that 1 repeat and test against the remaining fold not used for training
