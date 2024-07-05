@@ -18,7 +18,6 @@
 #' @seealso [calc_model_metrics()] for more arguments.
 #' @export
 
-#
 # models a function based on a presepcified model and evaluates training and test test using ROC, Sensitivity and Specificity
 ml_eval <- function(modelMatrix, y, k.outer = 10, rep.outer = 10, k.inner = 10, rep.inner = 5,
                    train.method = "glmnet", cv.method = "repeatedcv", metric = "ROC",
@@ -35,7 +34,7 @@ ml_eval <- function(modelMatrix, y, k.outer = 10, rep.outer = 10, k.inner = 10, 
   fold.train <- createMultiFolds(y, k = k.outer, times = rep.outer) # ensure that at least 10 samples are in each fold
 
   # split data based on these folds (Fold1 means that Fold1 is used for testing)
-  train.test.folds <- lapply(c(1:rep), function(split){
+  train.test.folds <- lapply(c(1:10), function(split){
 
     # select only folds containing the specified repeat in each iteration
     if(split == 10){
@@ -65,12 +64,12 @@ ml_eval <- function(modelMatrix, y, k.outer = 10, rep.outer = 10, k.inner = 10, 
   set.seed(849)
   results <- lapply(c(1:rep.outer), function(split){
     # select Data from 1 repeat
-    dat <- train.test.folds[[paste("Rep",split, sep ="")]]
+    dat <- train.test.folds[[paste("Rep",1, sep ="")]]
     # print message to follow progress
     message(paste("Starting calculation of Rep", split,"... of", rep.outer))
     # apply model to all folds of that 1 repeat and test against the remaining fold not used for training
     res <- pblapply(c(1:k.outer), function(fold){
-      calc_model_metrics(x.train = dat[[fold]]$x.train, y.train = dat[[fold]]$y.train, x.test =dat[[fold]]$x.test,
+      mlekb::calc_model_metrics(x.train = dat[[fold]]$x.train, y.train = dat[[fold]]$y.train, x.test =dat[[fold]]$x.test,
                          y.test = dat[[fold]]$y.test, number = k.inner, repeats = rep.inner, metric = metric,
                          train.method = train.method, cv.method = cv.method, tuneGrid = tuneGrid, ... )
     })
@@ -78,4 +77,5 @@ ml_eval <- function(modelMatrix, y, k.outer = 10, rep.outer = 10, k.inner = 10, 
   return(results)
   parallel::stopCluster(cl)
 }
+
 
