@@ -23,8 +23,8 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-
+<<<<<<< HEAD
 RoxygenNote: 7.3.0
-
-
-
+=======
+RoxygenNote: 7.2.1
+>>>>>>> 438cb8d7f6bcfba2cb04dcef4582cc1c38b5e6ce
